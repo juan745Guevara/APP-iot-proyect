@@ -81,13 +81,15 @@ async function tenantParams(extra: Record<string, string | number | boolean | un
 }
 
 async function qs(params: Record<string, string | number | boolean | undefined> = {}) {
-  const p = new URLSearchParams();
+  // Hermes no implementa URLSearchParams.set — armar query a mano
   const merged = await tenantParams(params);
+  const parts: string[] = [];
   for (const [k, v] of Object.entries(merged)) {
-    if (v !== undefined && v !== null) p.set(k, String(v));
+    if (v !== undefined && v !== null) {
+      parts.push(`${encodeURIComponent(k)}=${encodeURIComponent(String(v))}`);
+    }
   }
-  const s = p.toString();
-  return s ? `?${s}` : "";
+  return parts.length ? `?${parts.join("&")}` : "";
 }
 
 export async function login(usuario: string, password: string): Promise<LoginResponse> {
@@ -177,6 +179,119 @@ export async function getAlertas(opts: {
 
 export async function resolverAlerta(id: number) {
   return apiFetch(`/api/alertas/${id}/resolver`, { method: "PATCH" });
+}
+
+export async function getAutomatico(zona_id = ZONA_DEFAULT) {
+  return apiFetch(`/api/automatico${await qs({ zona_id })}`);
+}
+
+export async function guardarAutomatico(
+  actuador: string,
+  datos: Record<string, unknown>,
+  zona_id = ZONA_DEFAULT
+) {
+  return apiFetch(`/api/automatico/${actuador}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...datos, zona_id }),
+  });
+}
+
+export async function setModoAutomatico(
+  actuador: string,
+  modo: string,
+  zona_id = ZONA_DEFAULT
+) {
+  return apiFetch(`/api/automatico/${actuador}/modo`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ modo, zona_id }),
+  });
+}
+
+export async function getRiegos(zona_id = ZONA_DEFAULT) {
+  return apiFetch(`/api/riegos${await qs({ zona_id })}`);
+}
+
+export async function crearRiego(datos: Record<string, unknown>) {
+  return apiFetch("/api/riegos", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(datos),
+  });
+}
+
+export async function actualizarRiego(id: number, datos: Record<string, unknown>) {
+  return apiFetch(`/api/riegos/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(datos),
+  });
+}
+
+export async function eliminarRiego(id: number) {
+  return apiFetch(`/api/riegos/${id}`, { method: "DELETE" });
+}
+
+export async function getLog(opts: {
+  zona_id?: string;
+  limite?: number;
+  pagina?: number;
+} = {}) {
+  return apiFetch(
+    `/api/log${await qs({
+      zona_id: opts.zona_id ?? ZONA_DEFAULT,
+      limite: opts.limite ?? 50,
+      pagina: opts.pagina ?? 1,
+    })}`
+  );
+}
+
+export async function getEstadisticasSemana(zona_id = ZONA_DEFAULT) {
+  return apiFetch(`/api/estadisticas/semana${await qs({ zona_id })}`);
+}
+
+export async function getPrediccion(
+  sensor = "temperatura",
+  zona_id = ZONA_DEFAULT
+) {
+  return apiFetch(`/api/prediccion${await qs({ sensor, zona_id })}`);
+}
+
+export async function crearZona(datos: Record<string, unknown>) {
+  return apiFetch("/api/zonas", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(datos),
+  });
+}
+
+export async function editarZona(zona_id: string, datos: Record<string, unknown>) {
+  return apiFetch(`/api/zonas/${zona_id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(datos),
+  });
+}
+
+export async function eliminarZona(zona_id: string) {
+  return apiFetch(`/api/zonas/${zona_id}`, { method: "DELETE" });
+}
+
+export async function getAdminUsuarios() {
+  return apiFetch("/api/admin/usuarios");
+}
+
+export async function crearAdminUsuario(datos: Record<string, unknown>) {
+  return apiFetch("/api/admin/usuarios", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(datos),
+  });
+}
+
+export async function desactivarAdminUsuario(id: number) {
+  return apiFetch(`/api/admin/usuarios/${id}`, { method: "DELETE" });
 }
 
 export { API_URL, ZONA_DEFAULT };

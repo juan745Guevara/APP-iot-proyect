@@ -23,11 +23,15 @@ export default function AlertasScreen() {
   return (
     <View style={styles.root}>
       <View style={styles.toolbar}>
-        <Text style={styles.toolbarLabel}>Solo activas</Text>
+        <View>
+          <Text style={styles.heading}>Alerts</Text>
+          <Text style={styles.toolbarLabel}>Active only</Text>
+        </View>
         <Switch
           value={soloActivas}
           onValueChange={setSoloActivas}
           trackColor={{ true: colors.primaryDark, false: colors.border }}
+          thumbColor={soloActivas ? colors.primary : colors.textMuted}
         />
       </View>
       {error ? <Text style={styles.error}>{error}</Text> : null}
@@ -63,30 +67,37 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
   },
-  toolbarLabel: { color: colors.text, fontSize: 14 },
+  heading: {
+    color: colors.text,
+    fontSize: 28,
+    fontWeight: "700",
+    letterSpacing: -0.6,
+    marginBottom: 4,
+  },
+  toolbarLabel: { color: colors.textMuted, fontSize: 13 },
   list: { padding: 16, gap: 10 },
   card: {
     backgroundColor: colors.surface,
-    borderRadius: 12,
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: colors.border,
-    padding: 14,
+    borderColor: colors.borderSoft,
+    padding: 16,
     marginBottom: 10,
   },
-  msg: { color: colors.text, fontSize: 15, fontWeight: "600" },
+  msg: { color: colors.text, fontSize: 15, fontWeight: "700" },
   meta: { color: colors.textMuted, fontSize: 12, marginTop: 6 },
   btn: {
-    marginTop: 10,
+    marginTop: 12,
     alignSelf: "flex-start",
     backgroundColor: colors.primaryDark,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+    borderRadius: 10,
   },
-  btnText: { color: "#fff", fontWeight: "600" },
+  btnText: { color: "#fff", fontWeight: "700" },
   empty: { color: colors.textMuted, textAlign: "center", marginTop: 40 },
   error: { color: colors.danger, paddingHorizontal: 16 },
 });

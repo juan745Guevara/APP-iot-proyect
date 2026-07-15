@@ -1,13 +1,13 @@
 export const SENSORES = [
-  { id: "temperatura", label: "Temperatura", unidad: "°C", icono: "🌡️" },
-  { id: "humedad_aire", label: "Humedad aire", unidad: "%", icono: "💧" },
-  { id: "humedad_suelo", label: "Humedad suelo", unidad: "%", icono: "🌱" },
-  { id: "luminosidad", label: "Luminosidad", unidad: "%", icono: "☀️" },
+  { id: "temperatura", label: "Temperatura", unidad: "°C", short: "TEMP" },
+  { id: "humedad_aire", label: "Humedad aire", unidad: "%", short: "AIR" },
+  { id: "humedad_suelo", label: "Humedad suelo", unidad: "%", short: "SOIL" },
+  { id: "luminosidad", label: "Luminosidad", unidad: "%", short: "LIGHT" },
 ] as const;
 
 export const ACTUADORES = [
-  { id: "ventilador", label: "Ventilación", icono: "🌀" },
-  { id: "bomba", label: "Riego", icono: "💦" },
+  { id: "ventilador", label: "Ventilación", short: "FAN" },
+  { id: "bomba", label: "Riego", short: "PUMP" },
 ] as const;
 
 export const ESTADO = { ON: "ON", OFF: "OFF" } as const;
@@ -19,7 +19,7 @@ export const ESTADO_INICIAL_ACTUADORES: Record<string, EstadoActuador> = {
 };
 
 export const RANGOS_HISTORIAL = [
-  { id: "24h", label: "24 h" },
-  { id: "7d", label: "7 d" },
-  { id: "30d", label: "30 d" },
+  { id: "24h", label: "24h" },
+  { id: "7d", label: "7d" },
+  { id: "30d", label: "30d" },
 ] as const;
